@@ -1,6 +1,7 @@
 import requests
-import random
 import pandas as pd
+import random
+
 
 URL = "https://opentdb.com/api.php?amount=10&type=boolean"
 
@@ -25,20 +26,14 @@ def start_game():
 	else:
 		playername = input("What is your name? ")
 		return playername
-	
-def return_score(score):
-	print(f"Your score is {score}")
 
-# def create_leaderboard():
-#     leaderboard = pd.DataFrame()
-
-def update_leaderboard(leaderboard, name, score):
+def update_leaderboard(leaderboard,name, score):
 	new_row = pd.DataFrame({'Name': [name], 'Score': [score]})
-	updated_board = leaderboard.append(new_row)
-	return updated_board
+	updated_leaderboard = pd.concat([leaderboard,new_row])
+	return updated_leaderboard
 
 def show_leaderboard():
-	print(leaderboard)
+	print(leaderboard.groupby('Name').sum())
 
 def scoreboard():
 	return f"Thanks for playing! Your score was {score}"
@@ -54,6 +49,10 @@ while(1):
 				score += 1
 			i += 1
 		print("Out of questions")
+		i=0
 		print(scoreboard())
-		# update_leaderboard(leaderboard, name, score)
-		# show_leaderboard()
+		leaderboard = update_leaderboard(leaderboard, name, score)
+		score = 0
+		show_leaderboard()
+
+
